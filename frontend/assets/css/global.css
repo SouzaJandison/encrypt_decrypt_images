@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: 
+        url(http://www.webcis.com.br/images/imagens-noticias/select/ico-seta-appearance.gif) 
+        no-repeat 
+        #eeeeee;
+    background-position: 120px center;
+    padding: 5PX;
+    width: 150px;
+    height:30px;
+    border:1px solid #ddd;
+}
+
+input {
+    height: 25px;
+    padding: 5px;
+}
+
+input, select {
+    border: none;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+} 
+
+.main {
+    width: 60%;
+    height: 100vh;
+    background-color: #fff;
+    margin: auto;
+}
+
+.main h1 {
+    text-align: center;
+    padding: 15px;
+}
+
+.main form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: auto;
+}
+
+.main form div {
+    margin: 10px 0;
+}
+
+.options {
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    font-size: 22px;
+    padding: 0 10px;
+}
+
+.btn {
+    width: 150px;
+    height: 40px;
+    background-color: #eee;
+    border: none;
+    border-radius: 7px;
+    margin: 10px 10px;
+    font-size: 18px;
+}
+
+.result {
+    width: 400px;
+    height: 50px;
+    margin: 10px auto;
+}

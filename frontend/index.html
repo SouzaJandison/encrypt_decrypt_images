@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt & Decrypt PDF</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+    <div class="main">
+        <h1>Criptografar e Descriptografar Suas Imagens</h1>
+        <form action="" id="form" enctype="multipart/form-data">
+            <div class="options">
+                <label class="label">Opção: </label>
+                <select id="options" onchange="handlerOption()">
+                    <option value="encrypt">Criptografar</option>
+                    <option value="decrypt">Descriptografar</option>
+                </select>
+            </div>
+            <div>
+                <label class="label">Senha: </label>
+                <input type="password" id="password" placeholder="Digite a senha..." style="background-color: #eeeeee">
+            </div>
+            <div>
+                <label class="label">Imagem: </label>
+                <input
+                    type="file"
+                    id="image" 
+                    accept="image/*"
+                >
+            </div>
+            <button class="btn">Criptografar</button>
+        </form>
+        <div class="result">
+            <a id="result" download=""></a>
+        </div>
+    </div>
+    <script src="assets/javascript/main.js"></script>
+</body>
+</html>
