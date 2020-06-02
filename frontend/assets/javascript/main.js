@@ -21,6 +21,10 @@ $form.addEventListener('submit', function(event) {
     data.append('password', $password.value)
     data.append('file', $image.files[0])
 
+    $result.href = ''
+    $result.download = ''
+    $result.innerHTML = ''
+
     fetch('http://localhost:8000/', {
         method: 'POST',
         body: data
@@ -29,6 +33,7 @@ $form.addEventListener('submit', function(event) {
         return response.json()
     })
     .then((resp) => {
+        if(resp.error) throw resp 
         console.log(resp)
         $result.href = resp.url;
         $result.download = resp.name
@@ -36,5 +41,6 @@ $form.addEventListener('submit', function(event) {
     })
     .catch((error) => {
         console.log(error)
+        $result.innerHTML = error.message
     })
 })

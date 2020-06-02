@@ -13,14 +13,21 @@ const routes = express.Router()
 const alg = 'aes-256-cbc'
 
 routes.post('/', multer(multerConfig).single('file'), async (request, response) => {
-    const { filename, path } = request.file
-    const { option, password } = request.body
-    
-    const handlerFile = option === 'encrypt' ? await encrypt(filename, path, password) : await decrypt(filename, path, password)
-    
-    deleteFile('uploads', filename)
+    try {
+        const { filename, path } = request.file
+        const { option, password } = request.body
+        
+        const handlerFile = option === 'encrypt' 
+            ? await encrypt(filename, path, password) 
+            : await decrypt(filename, path, password)
+          
+        //deleteFile('uploads', filename)
 
-    return response.json(handlerFile)
+        return response.json(handlerFile)
+    } catch (error) {
+        console.log('FAIL', error)
+        return response.json(error)
+    }
 })
 
 function encrypt(filename, path, password) {
@@ -33,6 +40,7 @@ function encrypt(filename, path, password) {
             .on('finish', () => {
                 let imageFile = fs.readFileSync(Path.resolve(__dirname, '..', 'tmp', 'encrypt', filename))
                 let encoded = Buffer.from(imageFile).toString('base64')
+                deleteFile('uploads', filename)
                 deleteFile('encrypt', filename)
                 return resolve({
                     url: `data:image/png;base64,${encoded}`,
@@ -49,17 +57,27 @@ function decrypt(filename, path, password) {
         const write = fs.createWriteStream(`./tmp/decrypt/${filename}`)
         const cipher = crypto.createDecipher(alg, password)
 
-        read.pipe(cipher).pipe(write)
-            .on('finish', () => {
-                let imageFile = fs.readFileSync(Path.resolve(__dirname, '..', 'tmp', 'decrypt', filename))
-                let encoded = Buffer.from(imageFile).toString('base64')
-                deleteFile('decrypt', filename)
-                return resolve({
-                    url: `data:image/png;base64,${encoded}`,
-                    name: `decrypt-${filename}`
-                })
+        read.pipe(cipher)
+            .on('error', (error) => {
+                deleteFile('uploads', filename)
+                reject(error)
             })
-            .on('error', reject(new Error('DEU RUIM DE VERDADE!!!')))
+            .pipe(write)
+                .on('finish', () => {
+                    let imageFile = fs.readFileSync(Path.resolve(__dirname, '..', 'tmp', 'decrypt', filename))
+                    let encoded = Buffer.from(imageFile).toString('base64')
+                    deleteFile('uploads', filename)
+                    deleteFile('decrypt', filename)
+                    return resolve({
+                        url: `data:image/png;base64,${encoded}`,
+                        name: `decrypt-${filename}`
+                    })
+                })
+    }).catch(() => {
+        throw {
+            error: 'Error',
+            message: 'Senha Incorreta!'
+        }
     })
 }
 
