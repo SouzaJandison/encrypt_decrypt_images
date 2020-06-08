@@ -20,13 +20,11 @@ routes.post('/', multer(multerConfig).single('file'), async (request, response) 
         const handlerFile = option === 'encrypt' 
             ? await encrypt(filename, path, password) 
             : await decrypt(filename, path, password)
-          
-        //deleteFile('uploads', filename)
 
         return response.json(handlerFile)
     } catch (error) {
         console.log('FAIL', error)
-        return response.json(error)
+        return response.status(400).json(error)
     }
 })
 
@@ -60,6 +58,7 @@ function decrypt(filename, path, password) {
         read.pipe(cipher)
             .on('error', (error) => {
                 deleteFile('uploads', filename)
+                deleteFile('decrypt', filename)
                 reject(error)
             })
             .pipe(write)

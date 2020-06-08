@@ -33,6 +33,7 @@ $form.addEventListener('submit', function(event) {
         return response.json()
     })
     .then((resp) => {
+        debugger
         if(resp.error) throw resp 
         console.log(resp)
         $result.href = resp.url;
@@ -40,6 +41,7 @@ $form.addEventListener('submit', function(event) {
         $result.innerHTML = 'Baixa Arquivo'
     })
     .catch((error) => {
+        debugger
         console.log(error)
         $result.innerHTML = error.message
     })
